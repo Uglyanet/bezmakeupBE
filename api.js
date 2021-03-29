@@ -67,7 +67,7 @@ router.post("/users", async (req, res) => {
             ...body,
             latecomer: moment(body.authDate, 'YYYY MM DD HH:mm').isAfter(moment(process.env.START_DATE, 'YYYY MM DD HH:mm'))
         }
-        const newUser = await Users.findOneAndUpdate({ id: body.id }, newBody, { upsert: true });
+        const newUser = await Users.findOneAndUpdate({ id: body.id }, newBody, { upsert: true, new: true });
         res.send(newUser)
     } catch (err) {
         console.error(err)
