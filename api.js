@@ -11,6 +11,12 @@ router.get("/messages", (req, res) => {
     Messages.find({}).then(films => res.send(films))
 });
 
+router.get("/testmessages/:id/:chat_id", async (req, res) => {
+    const message = await Messages.findById(req.params.id)
+    await bot.telegram.sendMessage(req.params.chat_id, message.string, { parse_mode: 'HTML' });
+    res.send(message)
+});
+
 router.post("/messages", (req, res) => {
     Messages.create(req.body)
         .then(message => {
