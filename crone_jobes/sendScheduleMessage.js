@@ -18,13 +18,13 @@ exports.sendScheduleMessage = async () => {
         }
     })
     const users = await Users.find({ status: 'ACTIVE' })
-    await Promise.all(users.map(user => {
+    await Promise.allSettled(users.map(user => {
         return messagesWithPreviousDate.map(message => {
             return bot.telegram.sendMessage(user.id, message.string,{parse_mode:'HTML'});
         })
     }).flat()
     )
-    await Promise.all(messagesWithPreviousDate.map(message => {
+    await Promise.allSettled(messagesWithPreviousDate.map(message => {
         const {_id} = message;
         return Messages.findByIdAndUpdate({ _id }, { isPublished: true })
     }))
